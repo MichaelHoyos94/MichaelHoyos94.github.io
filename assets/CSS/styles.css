@@ -20,3 +20,38 @@ h2,
 h3 {
   font-family: "Hanken Grotesk", "Geist", system-ui, sans-serif;
 }
+
+.profile-card {
+  position: relative;
+}
+
+.profile-card::before {
+  position: absolute;
+  inset: 12% -8% -8% 14%;
+  content: "";
+  background: radial-gradient(circle, rgba(226, 232, 240, 0.24), transparent 64%);
+  filter: blur(34px);
+}
+
+.profile-frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  border-radius: 34% 66% 42% 58% / 44% 36% 64% 56%;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.75));
+  box-shadow: 0 32px 80px rgba(2, 6, 23, 0.5);
+}
+
+.profile-frame::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(180deg, transparent 45%, rgba(2, 6, 23, 0.92) 100%);
+}
+
+.profile-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1) contrast(1.08);
+}
