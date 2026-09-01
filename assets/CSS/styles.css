@@ -55,3 +55,21 @@ h3 {
   height: auto;
   filter: grayscale(1) contrast(1.08);
 }
+
+.technology-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.technology-card::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(135deg, rgba(226, 232, 240, 0.12), transparent 45%);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.technology-card:hover::before {
+  opacity: 1;
+}
