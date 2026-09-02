@@ -156,12 +156,65 @@ function renderProjects() {
 }
 
 /**
+ * Marks the current navigation link based on the section visible in the viewport.
+ */
+function observeActiveNavigation() {
+  const navigationLinks = document.querySelectorAll("[data-nav-link]");
+
+  if (!navigationLinks.length || !("IntersectionObserver" in window)) {
+    return;
+  }
+
+  const linkBySectionId = Array.from(navigationLinks).reduce((links, link) => {
+    const sectionId = link.getAttribute("href")?.replace("#", "");
+
+    if (sectionId) {
+      links.set(sectionId, link);
+    }
+
+    return links;
+  }, new Map());
+
+  const sections = Array.from(linkBySectionId.keys())
+    .map((sectionId) => document.querySelector(`#${sectionId}`))
+    .filter(Boolean);
+
+  const setActiveLink = (sectionId) => {
+    navigationLinks.forEach((link) => {
+      link.classList.remove("is-active");
+      link.removeAttribute("aria-current");
+    });
+
+    const activeLink = linkBySectionId.get(sectionId);
+
+    if (activeLink) {
+      activeLink.classList.add("is-active");
+      activeLink.setAttribute("aria-current", "page");
+    }
+  };
+
+  const navigationObserver = new IntersectionObserver(
+    (entries) => {
+      const visibleEntry = entries.find((entry) => entry.isIntersecting);
+
+      if (visibleEntry) {
+        setActiveLink(visibleEntry.target.id);
+      }
+    },
+    { rootMargin: "-34% 0px -56% 0px", threshold: 0 },
+  );
+
+  sections.forEach((section) => navigationObserver.observe(section));
+}
+
+/**
  * Initializes the static portfolio shell.
  */
 function initPortfolio() {
   document.documentElement.dataset.appReady = "true";
   renderTechnologies();
   renderProjects();
+  observeActiveNavigation();
 }
 
 initPortfolio();
