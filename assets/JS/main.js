@@ -41,23 +41,13 @@ const projects = [
   },
   {
     year: "2025",
-    title: "Proyecto B",
+    title: "API Unimarket",
     description:
-      "Demo de sistema con enfoque en estructura, organizacion de contenido y presentacion directa de funcionalidades principales.",
+      "Servidor API REST para una plataforma E-Commerce. Proyecto academico de programacion avanzada en la Uniquindio.",
     imageUrl:
       "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80",
     imageAlt: "Captura demo del Proyecto B con entorno de desarrollo",
-    projectUrl: "https://example.com/proyecto-b",
-  },
-  {
-    year: "2024",
-    title: "Proyecto C",
-    description:
-      "Demo de solucion estatica desplegable, enfocada en rendimiento, contenido accesible y mantenimiento sencillo.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Captura demo del Proyecto C en un espacio de trabajo",
-    projectUrl: "https://example.com/proyecto-c",
+    projectUrl: "https://github.com/MichaelHoyos94/unimarket",
   },
 ];
 
