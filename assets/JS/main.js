@@ -22,8 +22,22 @@ const projects = [
       "VittaSelf es un ERP ligero para una plataforma de ventas multinivel. Permite gestionar empresarios, productos, ordenes, carrito de compras, sanciones, auditorias, cajas registradoras, centros de costo, planes, beneficios y metricas de negocio.",
     imageUrl:
       "https://i.postimg.cc/NfXd8CLq/dashboard-vittaself.png",
-    imageAlt: "Captura demo del Proyecto A con codigo en pantalla",
+    imageAlt: "Panel principal demo de VittaSelf - ERP",
     projectUrl: "https://vittaself-develop.onrender.com/",
+    credentials: [
+      {
+        role: "Asesor",
+        available: true,
+        username: "asesor-armenia@vittaself.com",
+        password: "Vitta$elf",
+      },
+      {
+        role: "Empresario",
+        available: true,
+        username: "empresario@vittaself.com",
+        password: "Vitta$elf",
+      }
+    ],
   },
   {
     year: "2025",
@@ -71,6 +85,107 @@ function renderTechnologies() {
       `,
     )
     .join("");
+}
+
+/**
+ * Creates the optional demo credentials panel for a project.
+ */
+function renderCredentials(credentials = []) {
+  const availableCredentials = credentials.filter(
+    (credential) => credential.available && credential.username && credential.password,
+  );
+
+  if (!availableCredentials.length) {
+    return "";
+  }
+
+  const credentialRows = availableCredentials
+    .map(
+      (credential) => `
+        <div class="credential-row">
+          <div>
+            <span class="credential-role">${credential.role}</span>
+            <dl class="credential-values">
+              <div>
+                <dt>Usuario</dt>
+                <dd>${credential.username}</dd>
+              </div>
+              <div>
+                <dt>Contrasena</dt>
+                <dd>${credential.password}</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="credential-actions">
+            <button class="copy-credential-button" type="button" data-copy-value="${credential.username}">
+              Copiar usuario
+            </button>
+            <button class="copy-credential-button" type="button" data-copy-value="${credential.password}">
+              Copiar contrasena
+            </button>
+          </div>
+        </div>
+      `,
+    )
+    .join("");
+
+  return `
+    <section class="credentials-panel" aria-label="Credenciales demo">
+      <div class="credentials-heading">
+        <div>
+          <span class="credentials-kicker">Acceso controlado</span>
+          <h4>Credenciales demo</h4>
+        </div>
+        <span class="credentials-badge">Publicas</span>
+      </div>
+      <p class="credentials-note">Usa estos datos solo para explorar el despliegue de demostracion.</p>
+      <div class="credentials-list">${credentialRows}</div>
+      <p class="copy-feedback" role="status" aria-live="polite"></p>
+    </section>
+  `;
+}
+
+/**
+ * Copies a credential value and reports the result to the project panel.
+ */
+async function copyCredential(button) {
+  const value = button.dataset.copyValue;
+  const feedback = button.closest(".credentials-panel")?.querySelector(".copy-feedback");
+
+  if (!value || !feedback) {
+    return;
+  }
+
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+    } else {
+      const fallbackInput = document.createElement("textarea");
+      fallbackInput.className = "clipboard-fallback";
+      fallbackInput.value = value;
+      document.body.appendChild(fallbackInput);
+      fallbackInput.select();
+      document.execCommand("copy");
+      fallbackInput.remove();
+    }
+
+    feedback.textContent = "Copiado";
+  } catch {
+    feedback.textContent = "No disponible: copia el valor manualmente";
+  }
+
+  window.setTimeout(() => {
+    feedback.textContent = "";
+  }, 2200);
+}
+
+/**
+ * Enables copy controls inside rendered credential panels.
+ */
+function bindCredentialCopyButtons() {
+  document.querySelectorAll(".copy-credential-button").forEach((button) => {
+    button.addEventListener("click", () => copyCredential(button));
+  });
 }
 
 /**
@@ -138,6 +253,7 @@ function renderProjects() {
             <a class="mt-5 inline-flex text-sm font-semibold uppercase tracking-[0.2em] text-slate-200 underline decoration-slate-600 underline-offset-8 transition-colors hover:text-white" href="${project.projectUrl}" target="_blank" rel="noopener noreferrer">
               Ver despliegue
             </a>
+            ${renderCredentials(project.credentials)}
           </div>
 
           <div class="absolute left-1 top-8 z-10 md:static md:order-2 md:flex md:justify-center">
@@ -153,6 +269,7 @@ function renderProjects() {
     .join("");
 
   observeTimelineItems();
+  bindCredentialCopyButtons();
 }
 
 /**
