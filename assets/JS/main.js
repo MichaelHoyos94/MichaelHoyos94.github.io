@@ -49,6 +49,16 @@ const projects = [
     imageAlt: "Captura demo del Proyecto B con entorno de desarrollo",
     projectUrl: "https://github.com/MichaelHoyos94/unimarket",
   },
+  {
+    year: "2024",
+    title: "GShop",
+    description:
+      "API Desarrollada en node.js para una tienda de juegos sencilla. Permite gestionar los usuarios, autenticación, compras y reseñas a videojuegos.",
+    imageUrl:
+      "https://i.postimg.cc/hvMH826Y/code-tienda-juegos.png",
+    imageAlt: "Captura demo del Proyecto C en un espacio de trabajo",
+    projectUrl: "https://github.com/MichaelHoyos94/tiendaJuegos",
+  },
 ];
 
 /**
