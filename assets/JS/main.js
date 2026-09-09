@@ -17,13 +17,13 @@ const technologies = [
 const projects = [
   {
     year: "2026",
-    title: "Proyecto A",
+    title: "VittaSelf - ERP",
     description:
-      "Demo de aplicacion web orientada a presentar una experiencia clara, responsive y desplegada para validacion tecnica.",
+      "VittaSelf es un ERP ligero para una plataforma de ventas multinivel. Permite gestionar empresarios, productos, ordenes, carrito de compras, sanciones, auditorias, cajas registradoras, centros de costo, planes, beneficios y metricas de negocio.",
     imageUrl:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80",
+      "https://i.postimg.cc/NfXd8CLq/dashboard-vittaself.png",
     imageAlt: "Captura demo del Proyecto A con codigo en pantalla",
-    projectUrl: "https://example.com/proyecto-a",
+    projectUrl: "https://vittaself-develop.onrender.com/",
   },
   {
     year: "2025",
