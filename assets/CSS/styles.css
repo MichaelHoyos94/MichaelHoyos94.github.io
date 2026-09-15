@@ -32,7 +32,9 @@
   --radius-pill: 999px;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --duration-fast: 180ms;
+  --duration-base: 240ms;
   --duration-slow: 600ms;
 
   --font-body: "Geist", system-ui, sans-serif;
@@ -126,6 +128,11 @@ h4 {
   min-width: max-content;
   align-items: baseline;
   gap: 0.75rem;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.header-brand:active {
+  transform: scale(0.97);
 }
 
 .header-brand-name {
@@ -169,11 +176,18 @@ h4 {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
-.header-link:hover {
-  color: var(--color-text);
+@media (hover: hover) and (pointer: fine) {
+  .header-link:hover {
+    color: var(--color-text);
+  }
+}
+
+.header-link:active {
+  transform: scale(0.96);
 }
 
 .header-link.is-active {
@@ -181,7 +195,7 @@ h4 {
   color: var(--color-text);
 }
 
-.header-link.is-active::after {
+.header-link::after {
   position: absolute;
   right: 0.75rem;
   bottom: 0.3rem;
@@ -189,6 +203,12 @@ h4 {
   height: 1px;
   content: "";
   background-color: var(--color-accent);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.header-link.is-active::after {
+  opacity: 1;
 }
 
 .header-status {
@@ -251,8 +271,45 @@ h4 {
   transition: filter var(--duration-slow) var(--ease-out);
 }
 
-.profile-card:hover .profile-image {
-  filter: grayscale(0) contrast(1) brightness(1);
+@media (hover: hover) and (pointer: fine) {
+  .profile-card:hover .profile-image {
+    filter: grayscale(0) contrast(1) brightness(1);
+  }
+}
+
+/* Entrada unica al cargar la pagina: cada elemento del hero llega con un
+   pequeno desfase. Una animation de keyframes (no una transition) porque
+   ocurre una sola vez y no necesita ser interrumpible. */
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-enter-role {
+  animation: hero-enter 560ms var(--ease-out) both;
+}
+
+.hero-enter-title {
+  animation: hero-enter 620ms var(--ease-out) both 70ms;
+}
+
+.hero-enter-copy {
+  animation: hero-enter 620ms var(--ease-out) both 140ms;
+}
+
+.hero-enter-stack {
+  animation: hero-enter 560ms var(--ease-out) both 210ms;
+}
+
+.hero-enter-portrait {
+  animation: hero-enter 700ms var(--ease-out) both 120ms;
 }
 
 /* ==========================================================================
@@ -268,13 +325,40 @@ h4 {
 }
 
 .technology-group {
+  --reveal-delay: 0ms;
   background-color: var(--color-surface);
   padding: 1.25rem 1.5rem 1.5rem;
-  transition: background-color var(--duration-fast) var(--ease-out);
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  transition: background-color var(--duration-fast) var(--ease-out),
+    clip-path 520ms var(--ease-in-out), opacity 420ms var(--ease-out);
+  transition-delay: 0ms, var(--reveal-delay), var(--reveal-delay);
 }
 
-.technology-group:hover {
-  background-color: var(--color-surface-raised);
+.technology-group.is-visible {
+  clip-path: inset(0 0 0% 0);
+  opacity: 1;
+}
+
+/* Pequeno desfase por grupo para que el stack entre en cascada, no de golpe.
+   Se guarda en una variable para no retrasar tambien la transicion de hover. */
+.technology-group:nth-child(1) { --reveal-delay: 0ms; }
+.technology-group:nth-child(2) { --reveal-delay: 40ms; }
+.technology-group:nth-child(3) { --reveal-delay: 80ms; }
+.technology-group:nth-child(4) { --reveal-delay: 120ms; }
+.technology-group:nth-child(5) { --reveal-delay: 160ms; }
+.technology-group:nth-child(6) { --reveal-delay: 200ms; }
+.technology-group:nth-child(7) { --reveal-delay: 240ms; }
+.technology-group:nth-child(8) { --reveal-delay: 280ms; }
+
+@media (hover: hover) and (pointer: fine) {
+  .technology-group:hover {
+    background-color: var(--color-surface-raised);
+  }
+
+  .technology-group:hover .technology-group-title {
+    color: var(--color-accent);
+  }
 }
 
 .technology-group-header {
@@ -292,10 +376,6 @@ h4 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: color var(--duration-fast) var(--ease-out);
-}
-
-.technology-group:hover .technology-group-title {
-  color: var(--color-accent);
 }
 
 .technology-group-count {
@@ -359,8 +439,10 @@ h4 {
   transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-.timeline-card:hover {
-  border-color: var(--color-border-strong);
+@media (hover: hover) and (pointer: fine) {
+  .timeline-card:hover {
+    border-color: var(--color-border-strong);
+  }
 }
 
 .timeline-year {
@@ -385,8 +467,10 @@ h4 {
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.project-link:hover {
-  color: var(--color-accent);
+@media (hover: hover) and (pointer: fine) {
+  .project-link:hover {
+    color: var(--color-accent);
+  }
 }
 
 .timeline-node {
@@ -397,12 +481,33 @@ h4 {
   box-shadow: 0 0 0 5px var(--color-bg), 0 0 0 6px var(--color-border-strong);
 }
 
+/* Pulso breve cuando el proyecto entra en el viewport: refuerza que el
+   timeline "reacciona" al scroll, en sincronia con la tarjeta. */
+@keyframes timeline-node-pulse {
+  from {
+    transform: scale(0.4);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.timeline-item.is-visible .timeline-node {
+  animation: timeline-node-pulse 480ms var(--ease-out);
+}
+
 .timeline-image-link {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background-color: var(--color-surface);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.timeline-image-link:active {
+  transform: scale(0.98);
 }
 
 .timeline-image {
@@ -415,10 +520,16 @@ h4 {
     transform var(--duration-slow) var(--ease-out);
 }
 
-.timeline-image-link:hover .timeline-image,
 .timeline-image-link:focus-visible .timeline-image {
   filter: grayscale(0) contrast(1);
   transform: scale(1.03);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .timeline-image-link:hover .timeline-image {
+    filter: grayscale(0) contrast(1);
+    transform: scale(1.03);
+  }
 }
 
 /* ==========================================================================
@@ -529,9 +640,11 @@ h4 {
     transform var(--duration-fast) var(--ease-out);
 }
 
-.copy-credential-button:hover {
-  border-color: var(--color-text-soft);
-  color: var(--color-text);
+@media (hover: hover) and (pointer: fine) {
+  .copy-credential-button:hover {
+    border-color: var(--color-text-soft);
+    color: var(--color-text);
+  }
 }
 
 .copy-credential-button:active {
@@ -549,6 +662,15 @@ h4 {
   margin-top: 0.625rem;
   color: var(--color-text-soft);
   font-size: 0.75rem;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.copy-feedback.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .clipboard-fallback {
@@ -584,10 +706,16 @@ h4 {
     transform var(--duration-fast) var(--ease-out);
 }
 
-.footer-link:hover {
-  border-color: var(--color-text-soft);
-  color: var(--color-text);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .footer-link:hover {
+    border-color: var(--color-text-soft);
+    color: var(--color-text);
+    transform: translateY(-2px);
+  }
+}
+
+.footer-link:active {
+  transform: scale(0.96);
 }
 
 .footer-command {
@@ -660,10 +788,14 @@ h4 {
   *::before,
   *::after {
     transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
   }
 
-  .timeline-item {
+  .timeline-item,
+  .technology-group {
     opacity: 1;
     transform: none;
+    clip-path: none;
   }
 }

@@ -101,6 +101,90 @@ function renderTechnologies() {
       </article>
     `,
   ).join("");
+
+  // Se difiere un frame: si la pagina carga con un enlace directo a una
+  // seccion (ej. #arsenal-tecnologico), el salto automatico del navegador
+  // puede no haber terminado todavia en este mismo tick, y el observer
+  // mediria la posicion equivocada en su primera lectura.
+  window.requestAnimationFrame(observeTechnologyGroups);
+}
+
+/**
+ * Reveals technology groups with a clip-path stagger as the stack section
+ * enters the viewport. Runs once per group: it is reference content, not a
+ * timeline, so it does not need to replay on every scroll pass.
+ *
+ * Usa una comprobacion manual de posicion por cada frame (en vez de confiar
+ * solo en IntersectionObserver o en el evento "scroll") mientras dura un
+ * posible desplazamiento: se detecto que ni el observer ni el evento
+ * "scroll" se disparan de forma fiable cuando el salto llega por un clic en
+ * el nav del header o por un enlace directo con hash, dejando la seccion
+ * invisible para siempre.
+ */
+function observeTechnologyGroups() {
+  const technologyGroups = document.querySelectorAll(".technology-group");
+
+  if (!technologyGroups.length) {
+    return;
+  }
+
+  const revealGroupsInViewport = () => {
+    let hasPendingGroups = false;
+
+    technologyGroups.forEach((group) => {
+      if (group.classList.contains("is-visible")) {
+        return;
+      }
+
+      const bounds = group.getBoundingClientRect();
+      const isInViewport = bounds.top < window.innerHeight && bounds.bottom > 0;
+
+      if (isInViewport) {
+        group.classList.add("is-visible");
+      } else {
+        hasPendingGroups = true;
+      }
+    });
+
+    return hasPendingGroups;
+  };
+
+  let isWatching = false;
+
+  const watchUntilSettled = () => {
+    if (isWatching) {
+      return;
+    }
+
+    isWatching = true;
+
+    // Cubre la duracion de un scroll suave (CSS scroll-behavior) mas un
+    // margen: si tras ~1.5s todavia hay grupos pendientes, se abandona el
+    // sondeo hasta el proximo scroll/resize/clic de nav.
+    let framesLeft = 90;
+
+    const step = () => {
+      const hasPendingGroups = revealGroupsInViewport();
+
+      framesLeft -= 1;
+
+      if (hasPendingGroups && framesLeft > 0) {
+        window.requestAnimationFrame(step);
+      } else {
+        isWatching = false;
+      }
+    };
+
+    window.requestAnimationFrame(step);
+  };
+
+  window.addEventListener("scroll", watchUntilSettled, { passive: true });
+  window.addEventListener("resize", watchUntilSettled);
+  document.querySelectorAll("[data-nav-link]").forEach((link) => {
+    link.addEventListener("click", watchUntilSettled);
+  });
+
+  watchUntilSettled();
 }
 
 /**
@@ -198,11 +282,15 @@ async function copyCredential(button) {
     copiedButton.classList.remove("is-copied");
   });
   button.classList.toggle("is-copied", isCopied);
+  feedback.classList.add("is-visible");
 
   window.clearTimeout(Number(panel.dataset.feedbackTimer));
   const feedbackTimer = window.setTimeout(() => {
-    feedback.textContent = "";
+    feedback.classList.remove("is-visible");
     button.classList.remove("is-copied");
+    window.setTimeout(() => {
+      feedback.textContent = "";
+    }, 180);
   }, 2200);
   panel.dataset.feedbackTimer = String(feedbackTimer);
 }
@@ -292,7 +380,10 @@ function renderProjects() {
     })
     .join("");
 
-  observeTimelineItems();
+  // Mismo motivo que en renderTechnologies(): esperar un frame antes de
+  // observar, para no medir la posicion antes de que termine un salto
+  // directo a #trayectoria u otra seccion.
+  window.requestAnimationFrame(observeTimelineItems);
   bindCredentialCopyButtons();
 }
 
