@@ -1,190 +1,180 @@
 <!DOCTYPE html>
 <html lang="es" class="dark">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Portafolio de Michael Alejandro Aguirre Hoyos, desarrollador de software."
-    />
-    <meta name="theme-color" content="#020617" />
-    <title>Michael Alejandro Aguirre Hoyos | Desarrollador de Software</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesk:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script>
-      // Utilidades de Tailwind conectadas a los tokens de assets/CSS/styles.css.
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              canvas: "var(--color-bg)",
-              surface: {
-                DEFAULT: "var(--color-surface)",
-                raised: "var(--color-surface-raised)",
-              },
-              line: {
-                DEFAULT: "var(--color-border)",
-                strong: "var(--color-border-strong)",
-              },
-              ink: {
-                DEFAULT: "var(--color-text)",
-                soft: "var(--color-text-soft)",
-                muted: "var(--color-text-muted)",
-                subtle: "var(--color-text-subtle)",
-              },
-              accent: {
-                DEFAULT: "var(--color-accent)",
-                soft: "var(--color-accent-soft)",
-              },
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portafolio de Michael Alejandro Aguirre Hoyos, desarrollador de software." />
+  <meta name="theme-color" content="#020617" />
+  <title>Michael Alejandro Aguirre Hoyos | Desarrollador de Software</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Hanken+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    // Utilidades de Tailwind conectadas a los tokens de assets/CSS/styles.css.
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: "var(--color-bg)",
+            surface: {
+              DEFAULT: "var(--color-surface)",
+              raised: "var(--color-surface-raised)",
             },
-            borderRadius: {
-              sm: "var(--radius-sm)",
-              md: "var(--radius-md)",
-              lg: "var(--radius-lg)",
+            line: {
+              DEFAULT: "var(--color-border)",
+              strong: "var(--color-border-strong)",
             },
-            fontFamily: {
-              sans: ["Geist", "system-ui", "sans-serif"],
-              display: ["Hanken Grotesk", "Geist", "system-ui", "sans-serif"],
+            ink: {
+              DEFAULT: "var(--color-text)",
+              soft: "var(--color-text-soft)",
+              muted: "var(--color-text-muted)",
+              subtle: "var(--color-text-subtle)",
+            },
+            accent: {
+              DEFAULT: "var(--color-accent)",
+              soft: "var(--color-accent-soft)",
             },
           },
+          borderRadius: {
+            sm: "var(--radius-sm)",
+            md: "var(--radius-md)",
+            lg: "var(--radius-lg)",
+          },
+          fontFamily: {
+            sans: ["Geist", "system-ui", "sans-serif"],
+            display: ["Hanken Grotesk", "Geist", "system-ui", "sans-serif"],
+          },
         },
-      };
-    </script>
-    <link rel="stylesheet" href="assets/CSS/styles.css" />
-    <script src="assets/JS/main.js" defer></script>
-  </head>
-  <body class="min-h-screen bg-canvas text-ink antialiased">
-    <header class="site-header sticky top-0 z-50 px-4 py-3 sm:px-6 md:py-4">
-      <div class="header-bar mx-auto max-w-6xl">
-        <a class="header-brand" href="#informacion-personal" aria-label="Ir al inicio del portafolio">
-          <span class="header-brand-name">Michael Aguirre</span>
-          <span class="header-brand-role">Software Developer</span>
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="assets/CSS/styles.css" />
+  <script src="assets/JS/main.js" defer></script>
+</head>
+
+<body class="min-h-screen bg-canvas text-ink antialiased">
+  <header class="site-header sticky top-0 z-50 px-4 py-3 sm:px-6 md:py-4">
+    <div class="header-bar mx-auto max-w-6xl">
+      <a class="header-brand" href="#informacion-personal" aria-label="Ir al inicio del portafolio">
+        <span class="header-brand-name">Michael Aguirre</span>
+        <span class="header-brand-role">Software Developer</span>
+      </a>
+
+      <nav aria-label="Secciones principales" class="header-nav">
+        <a class="header-link is-active" href="#informacion-personal" data-nav-link aria-current="page">
+          Perfil
         </a>
+        <a class="header-link" href="#arsenal-tecnologico" data-nav-link>Stack</a>
+        <a class="header-link" href="#trayectoria" data-nav-link>Trayectoria</a>
+        <a class="header-link" href="#contacto" data-nav-link>Contacto</a>
+      </nav>
 
-        <nav aria-label="Secciones principales" class="header-nav">
-          <a class="header-link is-active" href="#informacion-personal" data-nav-link aria-current="page">
-            Perfil
-          </a>
-          <a class="header-link" href="#arsenal-tecnologico" data-nav-link>Stack</a>
-          <a class="header-link" href="#trayectoria" data-nav-link>Trayectoria</a>
-          <a class="header-link" href="#contacto" data-nav-link>Contacto</a>
-        </nav>
-
-        <div class="header-status" aria-label="Estado del portafolio">
-          <span class="header-status-dot"></span>
-          online / portfolio
-        </div>
+      <div class="header-status" aria-label="Estado del portafolio">
+        <span class="header-status-dot"></span>
+        online / portfolio
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="mx-auto max-w-6xl px-6">
-      <section
-        id="informacion-personal"
-        aria-labelledby="site-title"
-        class="grid items-center gap-10 pb-16 pt-10 md:min-h-[calc(100svh-6rem)] md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:py-12"
-      >
-        <div>
-          <p class="hero-role hero-enter-role">Desarrollador de software fullstack</p>
-          <h1 id="site-title" class="hero-enter-title text-4xl font-bold tracking-tight text-ink md:text-6xl">
-            Michael Alejandro Aguirre Hoyos
-          </h1>
-          <p class="hero-enter-copy mt-6 max-w-2xl text-lg leading-8 text-ink-soft">
-            Construyo soluciones web y aplicaciones enfocadas en estructura,
-            claridad y experiencia de usuario. Este portafolio presenta mi perfil,
-            tecnologias, trayectoria y participacion en proyectos academicos y personales.
-            Pretendo demostrar mi experiencia como desarrollador de software.
-          </p>
-          <ul class="hero-enter-stack mt-8 flex flex-wrap gap-3 text-sm font-medium" aria-label="Tecnologias base">
-            <li class="hero-pill">HTML</li>
-            <li class="hero-pill">CSS</li>
-            <li class="hero-pill">JavaScript</li>
-          </ul>
-        </div>
+  <main class="mx-auto max-w-6xl px-6">
+    <section id="informacion-personal" aria-labelledby="site-title"
+      class="grid items-center gap-10 pb-16 pt-10 md:min-h-[calc(100svh-6rem)] md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:py-12">
+      <div>
+        <p class="hero-role hero-enter-role">Desarrollador de software fullstack</p>
+        <h1 id="site-title" class="hero-enter-title text-4xl font-bold tracking-tight text-ink md:text-6xl">
+          Michael Alejandro Aguirre Hoyos
+        </h1>
+        <p class="hero-enter-copy mt-6 max-w-2xl text-lg leading-8 text-ink-soft">
+          Construyo aplicaciones web y soluciones enfocadas en estructura, claridad y experiencia de usuario. Este
+          portafolio presenta mi perfil, tecnologias, trayectoria y participacion en proyectos académicos y personales.
+        </p>
+        <ul class="hero-enter-stack mt-8 flex flex-wrap gap-3 text-sm font-medium" aria-label="Tecnologias base">
+          <li class="hero-pill">HTML</li>
+          <li class="hero-pill">CSS</li>
+          <li class="hero-pill">JavaScript</li>
+        </ul>
+      </div>
 
-        <div class="profile-card hero-enter-portrait mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md">
-          <img
-            src="assets/images/FOTO.jpg"
-            alt="Fotografia de Michael Alejandro Aguirre Hoyos"
-            class="profile-image"
-            width="960"
-            height="1280"
-          />
-        </div>
-      </section>
+      <div class="profile-card hero-enter-portrait mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md">
+        <img src="assets/images/FOTO.jpg" alt="Fotografia de Michael Alejandro Aguirre Hoyos" class="profile-image"
+          width="960" height="1280" />
+      </div>
+    </section>
 
-      <section id="arsenal-tecnologico" aria-labelledby="arsenal-title" class="py-20 md:py-28">
-        <div class="mb-10 max-w-2xl md:mb-14">
-          <p class="section-label">Stack principal</p>
-          <h2 id="arsenal-title" class="text-3xl font-bold tracking-tight text-ink md:text-5xl">
-            Arsenal tecnologico
-          </h2>
-          <p class="mt-4 text-base leading-7 text-ink-muted">
-            Herramientas y tecnologias organizadas por categoria para visualizar rapido
-            mi base tecnica como desarrollador de software.
-          </p>
-        </div>
-
-        <div id="technology-list" class="technology-grid" aria-live="polite"></div>
-      </section>
-
-      <section id="trayectoria" aria-labelledby="trayectoria-title" class="py-20 md:py-28">
-        <div class="mb-12 max-w-2xl md:mb-16">
-          <p class="section-label">Proyectos destacados</p>
-          <h2 id="trayectoria-title" class="text-3xl font-bold tracking-tight text-ink md:text-5xl">
-            Trayectoria
-          </h2>
-          <p class="mt-4 text-base leading-7 text-ink-muted">
-            Linea de tiempo con proyectos demo ordenados de forma descendente.
-            Cada entrada resume el contexto, muestra una imagen y enlaza al despliegue.
-          </p>
-        </div>
-
-        <div id="project-timeline" class="timeline-list" aria-live="polite"></div>
-      </section>
-    </main>
-
-    <footer id="contacto" class="footer-signature border-t border-line px-6 py-10">
-      <div class="mx-auto max-w-6xl">
-        <div class="footer-panel grid gap-8 p-6 md:grid-cols-[1.2fr_0.8fr] md:p-8">
-          <div>
-            <p class="section-label">Portafolio disponible para revision tecnica</p>
-            <h2 class="text-2xl font-bold tracking-tight text-ink md:text-3xl">
-              Michael Alejandro Aguirre Hoyos
-            </h2>
-            <p class="mt-3 max-w-xl text-sm leading-6 text-ink-muted">
-              Portafolio estatico para validar experiencia, stack y proyectos desde una
-              lectura rapida y directa.
-            </p>
-          </div>
-
-          <div class="flex flex-col justify-between gap-6 md:items-end md:text-right">
-            <nav aria-label="Redes y contacto" class="flex flex-wrap gap-3 md:justify-end">
-              <a class="footer-link" href="mailto:michaelaguirre94@outlook.com">Email</a>
-              <a class="footer-link" href="https://www.linkedin.com/in/michael-alejandro-aguirre-hoyos-322138232/" target="_blank" rel="noopener noreferrer">
-                LinkedIn
-              </a>
-              <a class="footer-link" href="https://github.com/MichaelHoyos94" target="_blank" rel="noopener noreferrer">
-                GitHub
-              </a>
-            </nav>
-
-            <div class="text-sm leading-6 text-ink-subtle">
-              <p>© 2026 Michael Alejandro Aguirre Hoyos.</p>
-              <p>Desarrollado por Michael Alejandro Aguirre Hoyos.</p>
-            </div>
-          </div>
-        </div>
-
-        <p class="footer-command mt-5 overflow-hidden whitespace-nowrap text-xs uppercase tracking-[0.2em]">
-          /github-pages/portafolio/michael-aguirre :: status=deployed :: contact=ready
+    <section id="arsenal-tecnologico" aria-labelledby="arsenal-title" class="py-20 md:py-28">
+      <div class="mb-10 max-w-2xl md:mb-14">
+        <p class="section-label">Stack principal</p>
+        <h2 id="arsenal-title" class="text-3xl font-bold tracking-tight text-ink md:text-5xl">
+          Arsenal tecnologico
+        </h2>
+        <p class="mt-4 text-base leading-7 text-ink-muted">
+          Estos son los lenguajes, frameworks, herramientas y plataformas en los que me desempeño.
+          Cuento con gran capacidad de aprendizaje para adaptarme a nuevos entornos, plataformas, tecnologías y retos.
         </p>
       </div>
-    </footer>
-  </body>
+
+      <div id="technology-list" class="technology-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="trayectoria" aria-labelledby="trayectoria-title" class="py-20 md:py-28">
+      <div class="mb-12 max-w-2xl md:mb-16">
+        <p class="section-label">Proyectos destacados</p>
+        <h2 id="trayectoria-title" class="text-3xl font-bold tracking-tight text-ink md:text-5xl">
+          Trayectoria
+        </h2>
+        <p class="mt-4 text-base leading-7 text-ink-muted">
+          Aquí puedes visualizar multiples proyectos académicos y personales en los que he trabajado. Algunos ya se
+          encuentran desplegados en produccón.
+        </p>
+      </div>
+
+      <div id="project-timeline" class="timeline-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer id="contacto" class="footer-signature border-t border-line px-6 py-10">
+    <div class="mx-auto max-w-6xl">
+      <div class="footer-panel grid gap-8 p-6 md:grid-cols-[1.2fr_0.8fr] md:p-8">
+        <div>
+          <p class="section-label">Disponible</p>
+          <h2 class="text-2xl font-bold tracking-tight text-ink md:text-3xl">
+            Sigo buscando el siguiente proyecto
+          </h2>
+          <p class="mt-3 max-w-xl text-sm leading-6 text-ink-muted">
+            Escribeme a mi correo o por LinkedIn. El codigo de todo lo que
+            muestro aqui esta en GitHub.
+          </p>
+        </div>
+
+        <div class="flex flex-col justify-between gap-6 md:items-end md:text-right">
+          <nav aria-label="Redes y contacto" class="flex flex-wrap gap-3 md:justify-end">
+            <a class="footer-link" href="mailto:michaelaguirre94@outlook.com">Email</a>
+            <a class="footer-link" href="https://www.linkedin.com/in/michael-alejandro-aguirre-hoyos-322138232/"
+              target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
+            <a class="footer-link" href="https://github.com/MichaelHoyos94" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+          </nav>
+
+          <div class="text-sm leading-6 text-ink-subtle">
+            <p>© 2026 Michael Alejandro Aguirre Hoyos.</p>
+            <p>Desarrollado por Michael Alejandro Aguirre Hoyos.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="footer-command mt-5 overflow-hidden whitespace-nowrap text-xs uppercase tracking-[0.2em]">
+        /github-pages/portafolio/michael-aguirre :: status=deployed :: contact=ready
+      </p>
+    </div>
+  </footer>
+</body>
+
 </html>

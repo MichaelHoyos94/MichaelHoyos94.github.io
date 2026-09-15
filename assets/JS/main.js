@@ -46,7 +46,7 @@ const projects = [
       "Servidor API REST para una plataforma E-Commerce. Proyecto academico de programacion avanzada en la Uniquindio.",
     imageUrl:
       "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Captura demo del Proyecto B con entorno de desarrollo",
+    imageAlt: "Captura del entorno de desarrollo de la API Unimarket",
     projectUrl: "https://github.com/MichaelHoyos94/unimarket",
   },
   {
@@ -56,7 +56,7 @@ const projects = [
       "API Desarrollada en node.js para una tienda de juegos sencilla. Permite gestionar los usuarios, autenticación, compras y reseñas a videojuegos.",
     imageUrl:
       "https://i.postimg.cc/hvMH826Y/code-tienda-juegos.png",
-    imageAlt: "Captura demo del Proyecto C en un espacio de trabajo",
+    imageAlt: "Captura del codigo de GShop, API de tienda de videojuegos",
     projectUrl: "https://github.com/MichaelHoyos94/tiendaJuegos",
   },
 ];
