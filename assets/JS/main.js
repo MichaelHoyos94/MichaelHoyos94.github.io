@@ -62,7 +62,21 @@ const projects = [
 ];
 
 /**
- * Renders technology cards from the editable technologies data array.
+ * Groups technologies by type, keeping the order in which each type first appears.
+ * @param {{ type: string, name: string }[]} items Technologies to group.
+ * @returns {Map<string, string[]>} Technology names indexed by type.
+ */
+function groupTechnologiesByType(items) {
+  return items.reduce((groups, technology) => {
+    const names = groups.get(technology.type) ?? [];
+    names.push(technology.name);
+    groups.set(technology.type, names);
+    return groups;
+  }, new Map());
+}
+
+/**
+ * Renders one technology block per category from the editable technologies data array.
  */
 function renderTechnologies() {
   const technologyList = document.querySelector("#technology-list");
@@ -71,20 +85,22 @@ function renderTechnologies() {
     return;
   }
 
-  technologyList.innerHTML = technologies
-    .map(
-      (technology) => `
-        <article class="technology-card rounded-xl border border-slate-800 bg-slate-900/70 p-5 transition-colors hover:border-slate-400">
-          <span class="relative text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-            ${technology.type}
-          </span>
-          <h3 class="relative mt-3 text-xl font-semibold text-white">
-            ${technology.name}
-          </h3>
-        </article>
-      `,
-    )
-    .join("");
+  const technologyGroups = groupTechnologiesByType(technologies);
+
+  technologyList.innerHTML = Array.from(
+    technologyGroups,
+    ([type, names]) => `
+      <article class="technology-group">
+        <div class="technology-group-header">
+          <h3 class="technology-group-title">${type}</h3>
+          <span class="technology-group-count">${names.length}</span>
+        </div>
+        <ul class="technology-chips">
+          ${names.map((name) => `<li class="technology-chip">${name}</li>`).join("")}
+        </ul>
+      </article>
+    `,
+  ).join("");
 }
 
 /**
@@ -150,11 +166,14 @@ function renderCredentials(credentials = []) {
  */
 async function copyCredential(button) {
   const value = button.dataset.copyValue;
-  const feedback = button.closest(".credentials-panel")?.querySelector(".copy-feedback");
+  const panel = button.closest(".credentials-panel");
+  const feedback = panel?.querySelector(".copy-feedback");
 
   if (!value || !feedback) {
     return;
   }
+
+  let isCopied = false;
 
   try {
     if (navigator.clipboard?.writeText) {
@@ -170,13 +189,22 @@ async function copyCredential(button) {
     }
 
     feedback.textContent = "Copiado";
+    isCopied = true;
   } catch {
     feedback.textContent = "No disponible: copia el valor manualmente";
   }
 
-  window.setTimeout(() => {
+  panel.querySelectorAll(".copy-credential-button.is-copied").forEach((copiedButton) => {
+    copiedButton.classList.remove("is-copied");
+  });
+  button.classList.toggle("is-copied", isCopied);
+
+  window.clearTimeout(Number(panel.dataset.feedbackTimer));
+  const feedbackTimer = window.setTimeout(() => {
     feedback.textContent = "";
+    button.classList.remove("is-copied");
   }, 2200);
+  panel.dataset.feedbackTimer = String(feedbackTimer);
 }
 
 /**
@@ -189,7 +217,8 @@ function bindCredentialCopyButtons() {
 }
 
 /**
- * Reveals timeline items as they enter the viewport.
+ * Toggles the visible state of timeline items as they enter or leave the viewport,
+ * so entries fade in and out again while scrolling up and down.
  */
 function observeTimelineItems() {
   const timelineItems = document.querySelectorAll(".timeline-item");
@@ -204,15 +233,12 @@ function observeTimelineItems() {
   }
 
   const timelineObserver = new IntersectionObserver(
-    (entries, observer) => {
+    (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
+        entry.target.classList.toggle("is-visible", entry.isIntersecting);
       });
     },
-    { threshold: 0.22 },
+    { threshold: 0.1 },
   );
 
   timelineItems.forEach((item) => timelineObserver.observe(item));
@@ -239,18 +265,16 @@ function renderProjects() {
       const imageOrder = isReversed ? "md:order-1" : "md:order-3";
 
       return `
-        <article class="timeline-item relative mb-14 pl-9 md:grid md:grid-cols-[1fr_48px_1fr] md:items-center md:gap-6 md:pl-0">
-          <div class="timeline-card order-1 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 transition-colors hover:border-slate-400 ${contentOrder}">
-            <span class="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
-              ${project.year}
-            </span>
-            <h3 class="mt-3 text-2xl font-semibold text-white">
+        <article class="timeline-item relative mb-14 pl-9 last:mb-0 md:mb-20 md:grid md:grid-cols-[1fr_48px_1fr] md:items-center md:gap-6 md:pl-0">
+          <div class="timeline-card order-1 ${contentOrder}">
+            <span class="timeline-year">${project.year}</span>
+            <h3 class="mt-2 text-2xl font-semibold tracking-tight text-ink">
               ${project.title}
             </h3>
-            <p class="mt-3 text-sm leading-6 text-slate-400">
+            <p class="mt-3 text-[0.9375rem] leading-7 text-ink-muted">
               ${project.description}
             </p>
-            <a class="mt-5 inline-flex text-sm font-semibold uppercase tracking-[0.2em] text-slate-200 underline decoration-slate-600 underline-offset-8 transition-colors hover:text-white" href="${project.projectUrl}" target="_blank" rel="noopener noreferrer">
+            <a class="project-link mt-5" href="${project.projectUrl}" target="_blank" rel="noopener noreferrer">
               Ver despliegue
             </a>
             ${renderCredentials(project.credentials)}
@@ -260,7 +284,7 @@ function renderProjects() {
             <div class="timeline-node"></div>
           </div>
 
-          <a class="timeline-image-link order-3 mt-5 block rounded-2xl border border-slate-800 bg-slate-900/70 md:mt-0 ${imageOrder}" href="${project.projectUrl}" target="_blank" rel="noopener noreferrer" aria-label="Abrir despliegue de ${project.title}">
+          <a class="timeline-image-link order-3 mt-5 block md:mt-0 ${imageOrder}" href="${project.projectUrl}" target="_blank" rel="noopener noreferrer" aria-label="Abrir despliegue de ${project.title}">
             <img class="timeline-image" src="${project.imageUrl}" alt="${project.imageAlt}" loading="lazy" />
           </a>
         </article>
@@ -270,6 +294,42 @@ function renderProjects() {
 
   observeTimelineItems();
   bindCredentialCopyButtons();
+}
+
+/**
+ * Forces a link active once the user reaches the bottom of the page. Short
+ * sections near the end (like the footer) can be smaller than the scroll
+ * observer's detection band and never trigger it on their own.
+ * @param {(sectionId: string) => void} setActiveLink Activates the link for a section id.
+ * @param {string | undefined} lastSectionId Id of the final tracked section.
+ */
+function bindBottomOfPageNavigation(setActiveLink, lastSectionId) {
+  if (!lastSectionId) {
+    return;
+  }
+
+  let isCheckQueued = false;
+
+  const checkScrollPosition = () => {
+    isCheckQueued = false;
+    const hasReachedBottom =
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+
+    if (hasReachedBottom) {
+      setActiveLink(lastSectionId);
+    }
+  };
+
+  const queueCheck = () => {
+    if (!isCheckQueued) {
+      isCheckQueued = true;
+      window.requestAnimationFrame(checkScrollPosition);
+    }
+  };
+
+  window.addEventListener("scroll", queueCheck, { passive: true });
+  window.addEventListener("resize", queueCheck);
+  checkScrollPosition();
 }
 
 /**
@@ -322,6 +382,9 @@ function observeActiveNavigation() {
   );
 
   sections.forEach((section) => navigationObserver.observe(section));
+
+  const lastSectionId = Array.from(linkBySectionId.keys()).at(-1);
+  bindBottomOfPageNavigation(setActiveLink, lastSectionId);
 }
 
 /**
