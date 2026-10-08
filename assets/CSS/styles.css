@@ -533,6 +533,125 @@ h4 {
 }
 
 /* ==========================================================================
+   Carrusel de imagenes (proyectos con dos o mas capturas)
+   ========================================================================== */
+.project-carousel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+}
+
+.project-carousel:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.project-carousel-track {
+  display: flex;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.project-carousel-slide {
+  position: relative;
+  flex: 0 0 100%;
+}
+
+.project-carousel-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.06);
+  transition: filter var(--duration-slow) var(--ease-out);
+}
+
+.project-carousel-slide:focus-visible .project-carousel-image {
+  filter: grayscale(0) contrast(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-carousel:hover .project-carousel-image {
+    filter: grayscale(0) contrast(1);
+  }
+}
+
+.project-carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.project-carousel-prev {
+  left: 0.75rem;
+}
+
+.project-carousel-next {
+  right: 0.75rem;
+}
+
+.project-carousel-control:hover,
+.project-carousel-control:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.project-carousel-footer {
+  position: absolute;
+  inset-inline: 0.75rem;
+  bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.project-carousel-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.project-carousel-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: var(--color-border-strong);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.project-carousel-dot.is-active {
+  background-color: var(--color-accent);
+  transform: scale(1.2);
+}
+
+.project-carousel-counter {
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  padding: 0.15rem 0.6rem;
+  font-size: 0.75rem;
+  color: var(--color-text-subtle);
+}
+
+/* ==========================================================================
    Credenciales demo
    ========================================================================== */
 .credentials-panel {

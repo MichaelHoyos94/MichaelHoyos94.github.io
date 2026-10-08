@@ -17,12 +17,40 @@ const technologies = [
 const projects = [
   {
     year: "2026",
+    title: "Senda - CRM/CMS",
+    description:
+      "Senda es un CRM/CMS para psicologas y terapeutas que permite gestionar clientes, citas, notas, disponibilidad horaria y otras funcionalidades realmente utiles para la administracion de un consultorio de psicologia. Cuenta con un panel privado para modificar estilos visuales, configurar la informacion de contacto y administrar el contenido del sitio web publico.",
+    images: [
+      {
+        url: "https://i.postimg.cc/fbVBxrHP/senda-panel.png",
+        alt: "Panel principal demo de Senda - CRM/CMS",
+      },
+      {
+        url: "https://i.postimg.cc/QMvSSJwM/senda-panel-2.png",
+        alt: "Panel principal demo de Senda - CRM/CMS",
+      },
+      {
+        url: "https://i.postimg.cc/CLCCkgSW/senda-public.png",
+        alt: "Vista publica Senda - CRM/CMS",
+      },
+      {
+        url: "https://i.postimg.cc/SNLLChkH/senda-public-2.png",
+        alt: "Vista publica Senda - CRM/CMS",
+      },
+    ],
+    projectUrl: "https://senda-demo.wasmer.app/",
+  },
+  {
+    year: "2026",
     title: "VittaSelf - ERP",
     description:
       "VittaSelf es un ERP ligero para una plataforma de ventas multinivel. Permite gestionar empresarios, productos, ordenes, carrito de compras, sanciones, auditorias, cajas registradoras, centros de costo, planes, beneficios y metricas de negocio.",
-    imageUrl:
-      "https://i.postimg.cc/NfXd8CLq/dashboard-vittaself.png",
-    imageAlt: "Panel principal demo de VittaSelf - ERP",
+    images: [
+      {
+        url: "https://i.postimg.cc/NfXd8CLq/dashboard-vittaself.png",
+        alt: "Panel principal demo de VittaSelf - ERP",
+      },
+    ],
     projectUrl: "https://vittaself-develop.onrender.com/",
     credentials: [
       {
@@ -44,9 +72,12 @@ const projects = [
     title: "API Unimarket",
     description:
       "Servidor API REST para una plataforma E-Commerce. Proyecto academico de programacion avanzada en la Uniquindio.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Captura del entorno de desarrollo de la API Unimarket",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80",
+        alt: "Captura del entorno de desarrollo de la API Unimarket",
+      },
+    ],
     projectUrl: "https://github.com/MichaelHoyos94/unimarket",
   },
   {
@@ -54,9 +85,12 @@ const projects = [
     title: "GShop",
     description:
       "API Desarrollada en node.js para una tienda de juegos sencilla. Permite gestionar los usuarios, autenticación, compras y reseñas a videojuegos.",
-    imageUrl:
-      "https://i.postimg.cc/hvMH826Y/code-tienda-juegos.png",
-    imageAlt: "Captura del codigo de GShop, API de tienda de videojuegos",
+    images: [
+      {
+        url: "https://i.postimg.cc/hvMH826Y/code-tienda-juegos.png",
+        alt: "Captura del codigo de GShop, API de tienda de videojuegos",
+      },
+    ],
     projectUrl: "https://github.com/MichaelHoyos94/tiendaJuegos",
   },
 ];
@@ -333,6 +367,176 @@ function observeTimelineItems() {
 }
 
 /**
+ * Builds the visual block for a project: a single linked image when it has
+ * only one, or a manual carousel (controls, dots, counter) when it has two
+ * or more. The carousel's interactive state is wired up later by
+ * initProjectCarousels(), delegated on the timeline container.
+ * @param {{ title: string, projectUrl: string, images: { url: string, alt: string }[] }} project Project data.
+ * @param {string} orderClass Tailwind order utility for alternating layout.
+ * @returns {string} Markup for the project visual.
+ */
+function renderProjectVisual(project, orderClass) {
+  const images = project.images ?? [];
+
+  if (images.length === 0) {
+    return "";
+  }
+
+  if (images.length === 1) {
+    const [image] = images;
+
+    return `
+      <a class="timeline-image-link order-3 mt-5 block md:mt-0 ${orderClass}" href="${project.projectUrl}" target="_blank" rel="noopener noreferrer" aria-label="Abrir despliegue de ${project.title}">
+        <img class="timeline-image" src="${image.url}" alt="${image.alt}" loading="lazy" />
+      </a>
+    `;
+  }
+
+  const slides = images
+    .map(
+      (image, index) => `
+        <a
+          class="project-carousel-slide"
+          href="${project.projectUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Abrir despliegue de ${project.title}"
+          aria-hidden="${index === 0 ? "false" : "true"}"
+          tabindex="${index === 0 ? "0" : "-1"}"
+        >
+          <img class="project-carousel-image" src="${image.url}" alt="${image.alt}" loading="${index === 0 ? "eager" : "lazy"}" />
+        </a>
+      `,
+    )
+    .join("");
+
+  const dots = images
+    .map(
+      (_, index) => `
+        <button
+          type="button"
+          class="project-carousel-dot${index === 0 ? " is-active" : ""}"
+          aria-label="Ver imagen ${index + 1} de ${images.length}"
+          aria-current="${index === 0 ? "true" : "false"}"
+          data-carousel-dot="${index}"
+        ></button>
+      `,
+    )
+    .join("");
+
+  return `
+    <div
+      class="project-carousel order-3 mt-5 md:mt-0 ${orderClass}"
+      data-carousel
+      data-index="0"
+      tabindex="0"
+      role="group"
+      aria-roledescription="carrusel"
+      aria-label="Capturas de ${project.title}"
+    >
+      <div class="project-carousel-track" data-carousel-track>${slides}</div>
+      <button type="button" class="project-carousel-control project-carousel-prev" data-carousel-prev aria-label="Imagen anterior">‹</button>
+      <button type="button" class="project-carousel-control project-carousel-next" data-carousel-next aria-label="Imagen siguiente">›</button>
+      <div class="project-carousel-footer">
+        <div class="project-carousel-dots" data-carousel-dots>${dots}</div>
+        <span class="project-carousel-counter" data-carousel-counter>1 / ${images.length}</span>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Moves a project carousel to the given slide index (wrapping around both
+ * ends) and syncs the track position, dots, counter and the accessible
+ * state of each slide.
+ * @param {HTMLElement} carousel Carousel container with [data-carousel].
+ * @param {number} targetIndex Index to navigate to, may be out of range.
+ */
+function goToCarouselSlide(carousel, targetIndex) {
+  const slides = carousel.querySelectorAll(".project-carousel-slide");
+  const track = carousel.querySelector("[data-carousel-track]");
+  const dots = carousel.querySelectorAll("[data-carousel-dot]");
+  const counter = carousel.querySelector("[data-carousel-counter]");
+  const slideCount = slides.length;
+
+  if (!track || slideCount === 0) {
+    return;
+  }
+
+  const nextIndex = (targetIndex + slideCount) % slideCount;
+
+  track.style.transform = `translateX(-${nextIndex * 100}%)`;
+  carousel.dataset.index = String(nextIndex);
+
+  slides.forEach((slide, slideIndex) => {
+    const isActive = slideIndex === nextIndex;
+    slide.setAttribute("aria-hidden", String(!isActive));
+    slide.setAttribute("tabindex", isActive ? "0" : "-1");
+  });
+
+  dots.forEach((dot, dotIndex) => {
+    const isActive = dotIndex === nextIndex;
+    dot.classList.toggle("is-active", isActive);
+    dot.setAttribute("aria-current", String(isActive));
+  });
+
+  if (counter) {
+    counter.textContent = `${nextIndex + 1} / ${slideCount}`;
+  }
+}
+
+/**
+ * Wires manual navigation (prev/next buttons, dots and arrow keys) for
+ * every project carousel. Uses event delegation on the timeline container
+ * so it only needs to run once, regardless of how many carousels exist.
+ */
+function initProjectCarousels() {
+  const projectTimeline = document.querySelector("#project-timeline");
+
+  if (!projectTimeline) {
+    return;
+  }
+
+  projectTimeline.addEventListener("click", (event) => {
+    const carousel = event.target.closest("[data-carousel]");
+
+    if (!carousel) {
+      return;
+    }
+
+    const currentIndex = Number(carousel.dataset.index ?? 0);
+    const dot = event.target.closest("[data-carousel-dot]");
+
+    if (event.target.closest("[data-carousel-prev]")) {
+      event.preventDefault();
+      goToCarouselSlide(carousel, currentIndex - 1);
+    } else if (event.target.closest("[data-carousel-next]")) {
+      event.preventDefault();
+      goToCarouselSlide(carousel, currentIndex + 1);
+    } else if (dot) {
+      event.preventDefault();
+      goToCarouselSlide(carousel, Number(dot.dataset.carouselDot));
+    }
+  });
+
+  projectTimeline.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+      return;
+    }
+
+    const carousel = event.target.closest("[data-carousel]");
+
+    if (!carousel) {
+      return;
+    }
+
+    event.preventDefault();
+    const currentIndex = Number(carousel.dataset.index ?? 0);
+    goToCarouselSlide(carousel, currentIndex + (event.key === "ArrowLeft" ? -1 : 1));
+  });
+}
+
+/**
  * Renders project timeline cards from the editable projects data array.
  */
 function renderProjects() {
@@ -372,9 +576,7 @@ function renderProjects() {
             <div class="timeline-node"></div>
           </div>
 
-          <a class="timeline-image-link order-3 mt-5 block md:mt-0 ${imageOrder}" href="${project.projectUrl}" target="_blank" rel="noopener noreferrer" aria-label="Abrir despliegue de ${project.title}">
-            <img class="timeline-image" src="${project.imageUrl}" alt="${project.imageAlt}" loading="lazy" />
-          </a>
+          ${renderProjectVisual(project, imageOrder)}
         </article>
       `;
     })
@@ -485,6 +687,7 @@ function initPortfolio() {
   document.documentElement.dataset.appReady = "true";
   renderTechnologies();
   renderProjects();
+  initProjectCarousels();
   observeActiveNavigation();
 }
 
